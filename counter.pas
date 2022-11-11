@@ -1,5 +1,5 @@
 Program main;
-Uses sysutils;
+Uses sysutils,dos;
 
 function head(): string;
 Begin
@@ -13,22 +13,27 @@ End;
 
 function body(): string;
 var
+s:string;
+ss:string;
 f1:Longint;
 i:Longint;
 Begin
-	f1:=FileOpen ('./0',fmOpenRead);
+	s:=GetEnv('QUERY_STRING');
+	i:=0;
+	ss:='./zzz'+s;
+	f1:=FileOpen (ss,fmOpenRead);
 	if f1=-1 then
 		begin
 			i:=0;
-			f1:=FileCreate ('./0');
+			f1:=FileCreate (ss);
 			FileWrite (f1,i,SizeOf(i));
 			FileClose (f1);
-			f1:=FileOpen ('./0',fmOpenRead);
+			f1:=FileOpen (ss,fmOpenRead);
 		end;
 	FileRead (f1,i,SizeOf(i));
 	FileClose (f1);
 	i:=i+1;
-	f1:=FileOpen ('./0',fmOpenWrite);
+	f1:=FileOpen (ss,fmOpenWrite);
 	FileWrite (f1,i,SizeOf(i));
 	FileClose (f1);
      	Str(i,body);
